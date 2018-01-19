@@ -1,3 +1,5 @@
+//	LIRI.JS
+
 require("dotenv").config();
 var fs = require('fs');
 var request = require('request');
@@ -12,28 +14,14 @@ var cmd = process.argv[2];
 var query = process.argv.slice(3).join(" ");
 
 	if (!query) {
-
 		if (cmd == "spotify-this-song") {
 			query = "The Sign Ace of Base";
 		} else if (cmd == "movie-this") {
 			query = "Mr. Nobody";
-		} else if (cmd == "do-what-it-says") {
-			fs.readFile("random.txt", "utf8", (err, data) => {
-				if (err) {
-					console.log(err);
-				}
-				var array = data.split(",");
-				cmd = array[0];
-				query = array[1];
-				execute();
-			});
 		}
-
-	} else {
-
-		execute();
 	}
 
+execute();
 
 function execute() {
 
@@ -60,7 +48,6 @@ function execute() {
 			.then(function(response) {
 
 						var obj = response.tracks.items[0];
-
 						var arr = [];
 
 						for (var i = 0; i < obj.artists.length; i++) {
@@ -83,19 +70,27 @@ function execute() {
 		var queryURL = "http://www.omdbapi.com/?apikey=trilogy&t=" + query + "&type=movie&r=json";
 		
 		request(queryURL, function (error, response, body) {
-			console.log('Title:', JSON.parse(body).Title);
-			console.log('Year:', JSON.parse(body).Year);
-			console.log('Rating: ' + JSON.parse(body).Ratings[0].Source + "-" + JSON.parse(body).Ratings[0].Value);
-			console.log('Rating: ' + JSON.parse(body).Ratings[1].Source + "-" + JSON.parse(body).Ratings[1].Value);
-			console.log('Country: ' + JSON.parse(body).Country);
-			console.log('Language: ' + JSON.parse(body).Language);
-			console.log('Plot: ' + JSON.parse(body).Plot);
-			console.log('Actors: ' + JSON.parse(body).Actors);
+			console.log('\nTitle:', JSON.parse(body).Title);
+			console.log('\nYear:', JSON.parse(body).Year);
+			console.log('\nRating: ' + JSON.parse(body).Ratings[0].Source + "-" + JSON.parse(body).Ratings[0].Value);
+			console.log('\nRating: ' + JSON.parse(body).Ratings[1].Source + "-" + JSON.parse(body).Ratings[1].Value);
+			console.log('\nCountry: ' + JSON.parse(body).Country);
+			console.log('\nLanguage: ' + JSON.parse(body).Language);
+			console.log('\nPlot: ' + JSON.parse(body).Plot);
+			console.log('\nActors: ' + JSON.parse(body).Actors);
 		});
 
-	} else if (cmd == "do-what-it-says" && query) {
+	} else if (cmd == "do-what-it-says") {
 
-		console.log("Something went wrong :(");
+		fs.readFile("random.txt", "utf8", (err, data) => {
+			if (err) {
+				console.log(err);
+			}
+			var array = data.split(",");
+			cmd = array[0];
+			query = array[1];
+			execute();
+		});
 
 	} else {
 
