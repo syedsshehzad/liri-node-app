@@ -16,6 +16,7 @@ var query = process.argv.slice(3).join(" ");
 	if (!query) {
 		if (cmd == "spotify-this-song") {
 			query = "The Sign Ace of Base";
+
 		} else if (cmd == "movie-this") {
 			query = "Mr. Nobody";
 		}
@@ -47,18 +48,18 @@ function execute() {
 			.search({type: 'track', query: query})
 			.then(function(response) {
 
-						var obj = response.tracks.items[0];
-						var arr = [];
+				var obj = response.tracks.items[0];
+				var arr = [];
 
-						for (var i = 0; i < obj.artists.length; i++) {
-							arr.push(obj.artists[i].name);
-						}
+				for (var i = 0; i < obj.artists.length; i++) {
+					arr.push(obj.artists[i].name);
+				}
 
-						console.log("\nArtist(s): " + arr);
-						console.log("\nName: " + obj.name);
-						console.log("\nLink: " + obj.external_urls.spotify);
-						console.log("\nAlbum: " + obj.album.name);
-						console.log("\nPopularity: " + obj.popularity);
+				console.log("\nArtist(s): " + arr);
+				console.log("\nName: " + obj.name);
+				console.log("\nLink: " + obj.external_urls.spotify);
+				console.log("\nAlbum: " + obj.album.name);
+				console.log("\nPopularity: " + obj.popularity);
 
 			})
 			.catch(function(err) {
@@ -70,22 +71,21 @@ function execute() {
 		var queryURL = "http://www.omdbapi.com/?apikey=trilogy&t=" + query + "&type=movie&r=json";
 		
 		request(queryURL, function (error, response, body) {
-			console.log('\nTitle:', JSON.parse(body).Title);
-			console.log('\nYear:', JSON.parse(body).Year);
-			console.log('\nRating: ' + JSON.parse(body).Ratings[0].Source + "-" + JSON.parse(body).Ratings[0].Value);
-			console.log('\nRating: ' + JSON.parse(body).Ratings[1].Source + "-" + JSON.parse(body).Ratings[1].Value);
-			console.log('\nCountry: ' + JSON.parse(body).Country);
-			console.log('\nLanguage: ' + JSON.parse(body).Language);
-			console.log('\nPlot: ' + JSON.parse(body).Plot);
-			console.log('\nActors: ' + JSON.parse(body).Actors);
+			var obj = JSON.parse(body);
+			console.log('\nTitle:', obj.Title);
+			console.log('\nYear:', obj.Year);
+			console.log('\nRating: ' + obj.Ratings[0].Source + "-" + obj.Ratings[0].Value);
+			console.log('\nRating: ' + obj.Ratings[1].Source + "-" + obj.Ratings[1].Value);
+			console.log('\nCountry: ' + obj.Country);
+			console.log('\nLanguage: ' + obj.Language);
+			console.log('\nPlot: ' + obj.Plot);
+			console.log('\nActors: ' + obj.Actors);
 		});
 
 	} else if (cmd == "do-what-it-says") {
 
 		fs.readFile("random.txt", "utf8", (err, data) => {
-			if (err) {
-				console.log(err);
-			}
+			if (err) {console.log(err);}
 			var array = data.split(",");
 			cmd = array[0];
 			query = array[1];
@@ -94,7 +94,7 @@ function execute() {
 
 	} else {
 
-		console.log("YOU GOTTA ENTER A VALID COMMAND!");
+		console.log("INVALID COMMAND!");
 
 	}
 }
